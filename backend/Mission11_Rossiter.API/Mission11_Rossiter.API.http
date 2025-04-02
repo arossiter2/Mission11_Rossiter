@@ -1,0 +1,6 @@
+@Mission11_Rossiter.API_HostAddress = http://localhost:5180
+
+GET {{Mission11_Rossiter.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
