@@ -20,10 +20,15 @@ namespace Mission11_Rossiter.API.Controllers
 
         // GET endpoint: api/Book/AllBooks
         [HttpGet("AllBooks")]
-        public IActionResult GetBooks(int pageSize = 10, int pageNum = 1, string? sortBy = null)
+        public IActionResult GetBooks(int pageSize = 10, int pageNum = 1, string? sortBy = null, [FromQuery] List<string> bookTypes = null)
         {
             // Start by selecting all books from the database
             IQueryable<Book> query = _bookContext.Books;
+
+            if (bookTypes != null && bookTypes.Any())
+            {
+                query = query.Where(b => bookTypes.Contains(b.Category));
+            }
 
             // If the query string includes sortBy=title, sort books alphabetically by title
             if (!string.IsNullOrEmpty(sortBy) && sortBy.ToLower() == "title")
@@ -49,6 +54,16 @@ namespace Mission11_Rossiter.API.Controllers
 
             // Return the response as a 200 OK with JSON data
             return Ok(response);
+        }
+
+        [HttpGet("GetBookTypes")]
+        public IActionResult GetBookTypes()
+        {
+            var bookTypes = _bookContext.Books
+                .Select(b => b.Category)
+                .Distinct()
+                .ToList();
+            return Ok(bookTypes);
         }
     }
 }

@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import { Book } from "./types/Book";
 
-function BookList() {
+type BookListProps = {
+    selectedCategories: string[]
+}
+
+function BookList({selectedCategories }: BookListProps) {
   // State variables for books, pagination, and sorting
   const [books, setBooks] = useState<Book[]>([]);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -14,8 +18,12 @@ function BookList() {
   useEffect(() => {
     const fetchBooks = async () => {
       const sortParam = sortByTitle ? "&sortBy=title" : "";
+      const categoryParams = selectedCategories
+      .map((cat) => `bookTypes=${encodeURIComponent(cat)}`)
+      .join("&");
+
       const response = await fetch(
-        `https://localhost:5000/api/Book/AllBooks?pageSize=${pageSize}&pageNum=${pageNum}${sortParam}`
+        `https://localhost:5000/api/Book/AllBooks?pageSize=${pageSize}&pageNum=${pageNum}${sortParam}${selectedCategories.length ? `&${categoryParams}` : ""}`
       );
       const data = await response.json();
 
@@ -27,11 +35,11 @@ function BookList() {
       setTotalPages(Math.ceil(totalItems / pageSize));
     };
     fetchBooks();
-  }, [pageSize, pageNum, totalItems, sortByTitle]);
+  }, [pageSize, pageNum, totalItems, sortByTitle, selectedCategories]);
 
   return (
     <>
-      <h1>Books</h1>
+      
       <br />
 
       {/* Render each book in a styled card */}
@@ -51,8 +59,10 @@ function BookList() {
                 <strong>IBSN:</strong> {b.isbn}
               </li>
               <li>
-                <strong>Classification/Category:</strong> {b.classification}/
-                {b.category}
+                <strong>Classification:</strong> {b.classification}
+              </li>
+              <li>
+                <strong>Category:</strong> {b.category}
               </li>
               <li>
                 <strong>Page Count: </strong>

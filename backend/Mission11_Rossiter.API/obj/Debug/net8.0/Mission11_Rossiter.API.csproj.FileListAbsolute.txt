@@ -77,3 +77,4 @@ C:\Users\ainsl\Desktop\Mission11_Rossiter\backend\Mission11_Rossiter.API\obj\Deb
 C:\Users\ainsl\Desktop\Mission11_Rossiter\backend\Mission11_Rossiter.API\obj\Debug\net8.0\Mission11_Rossiter.API.pdb
 C:\Users\ainsl\Desktop\Mission11_Rossiter\backend\Mission11_Rossiter.API\obj\Debug\net8.0\Mission11_Rossiter.API.genruntimeconfig.cache
 C:\Users\ainsl\Desktop\Mission11_Rossiter\backend\Mission11_Rossiter.API\obj\Debug\net8.0\ref\Mission11_Rossiter.API.dll
+C:\Users\ainsl\Desktop\Mission11_Rossiter\backend\Mission11_Rossiter.API\obj\Debug\net8.0\Mission11_Rossiter.API.sourcelink.json
