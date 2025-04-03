@@ -91,7 +91,7 @@ function BookList() {
 
       {/* Page size selector */}
       <label>
-        Results per page:
+        Number Results per page:
         <select
           value={pageSize}
           onChange={(p) => {
