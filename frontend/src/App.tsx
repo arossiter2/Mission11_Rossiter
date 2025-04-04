@@ -1,31 +1,37 @@
-import { useState } from "react";
 import "./App.css";
-import BookList from "./BookList";
-import CategoryFilter from "./CategoryFilter";
-import WelcomeBand from "./WelcomeBand";
+import { CartProvider } from "./context/CartContext";
+import CartPage from "./pages/CartPage";
+import PurchasePage from "./pages/PurchasePage";
+import BooksPage from "./pages/BooksPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// This is the main entry point of the application.
+// It sets up routing and wraps the app in the CartProvider for global cart state.
 function App() {
-  
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-
   return (
     <>
-    <div className="container mt-4">
-      <div className="row welcome-banner">
-        <WelcomeBand/>
-      </div>
-      <div className="row">
-        <div className="col-md-3">
-          <CategoryFilter selectedCategories = {selectedCategories} setSelectedCategories={setSelectedCategories}/>
-        </div>
-        <div className="col-md-9">
-          <BookList selectedCategories={selectedCategories}/>
+      {/* Provide cart context to the entire app */}
+      <CartProvider>
+        {/* React Router handles navigation between pages */}
+        <Router>
+          <Routes>
+            {/* Home route - shows the book catalog */}
+            <Route path="/" element={<BooksPage />} />
 
-        </div>
+            {/* Explicit /books route - also shows the book catalog */}
+            <Route path="/books" element={<BooksPage />} />
 
-      </div>
+            {/* Purchase page with dynamic route params: title, bookID, and price */}
+            <Route
+              path="/purchase/:title/:bookID/:price"
+              element={<PurchasePage />}
+            />
 
-    </div>
+            {/* Cart page where users see their selected items */}
+            <Route path="/cart" element={<CartPage />} />
+          </Routes>
+        </Router>
+      </CartProvider>
     </>
   );
 }
