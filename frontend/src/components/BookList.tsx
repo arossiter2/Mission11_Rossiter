@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Book } from "../types/Book";
 import { useNavigate } from "react-router-dom";
+import Pagination from "./Pagination";
+import {fetchBooks} from "../api/BooksAPI"
 
 type BookListProps = {
   selectedCategories: string[];
@@ -11,34 +13,39 @@ function BookList({ selectedCategories }: BookListProps) {
   const [books, setBooks] = useState<Book[]>([]);
   const [pageSize, setPageSize] = useState<number>(10);
   const [pageNum, setPageNum] = useState<number>(1);
-  const [totalItems, setTotalItems] = useState<number>(0);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [sortByTitle, setSortByTitle] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate();
 
   // Fetch books from the ASP.NET backend when dependencies change
   useEffect(() => {
-    const fetchBooks = async () => {
-      const sortParam = sortByTitle ? "&sortBy=title" : "";
-      const categoryParams = selectedCategories
-        .map((cat) => `bookTypes=${encodeURIComponent(cat)}`)
-        .join("&");
+    const loadProjects = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchBooks(pageSize, pageNum, selectedCategories);
 
-      const response = await fetch(
-        `https://localhost:5000/api/Book/AllBooks?pageSize=${pageSize}&pageNum=${pageNum}${sortParam}${selectedCategories.length ? `&${categoryParams}` : ""}`
-      );
-      const data = await response.json();
-
-      // Update state with book data and total item count
-      setBooks(data.books);
-      setTotalItems(data.totalNumBooks);
-
-      // Calculate total pages based on updated total items and page size
-      setTotalPages(Math.ceil(totalItems / pageSize));
+        if (data) {
+          setBooks(data.books);
+          setTotalPages(Math.ceil(data.totalNumBooks / pageSize));
+          setError(null);
+        } else {
+          setError("No data returned from server.");
+        }
+      } catch (error) {
+        setError((error as Error).message);
+      } finally {
+        setLoading(false);
+      }
     };
-    fetchBooks();
-  }, [pageSize, pageNum, totalItems, sortByTitle, selectedCategories]);
 
+    loadProjects();
+  }, [pageSize, pageNum, sortByTitle, selectedCategories]);
+
+  if (loading) return <p>loading projects...</p>;
+  if (error) return <p className="text-red-500">Error</p>;
+  
   return (
     <>
       <br />
@@ -95,43 +102,16 @@ function BookList({ selectedCategories }: BookListProps) {
         </div>
       ))}
 
-      {/* Pagination buttons */}
-      <button disabled={pageNum === 1} onClick={() => setPageNum(pageNum - 1)}>
-        Previous
-      </button>
-      {[...Array(totalPages)].map((_, index) => (
-        <button
-          key={index + 1}
-          onClick={() => setPageNum(index + 1)}
-          disabled={pageNum === index + 1}
-        >
-          {index + 1}
-        </button>
-      ))}
-      <button
-        disabled={pageNum === totalPages}
-        onClick={() => setPageNum(pageNum + 1)}
-      >
-        Next
-      </button>
-
-      <br />
-
-      {/* Page size selector */}
-      <label>
-        Number Results per page:
-        <select
-          value={pageSize}
-          onChange={(p) => {
-            setPageSize(Number(p.target.value));
-            setPageNum(1);
-          }}
-        >
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
-        </select>
-      </label>
+      <Pagination
+        currentPage={pageNum}
+        totalPages={totalPages}
+        pageSize={pageSize}
+        onPageChange={setPageNum}
+        onPageSizeChange={(newSize) => {
+          setPageSize(newSize);
+          setPageNum(1);
+        }}
+      />
 
       <br />
 

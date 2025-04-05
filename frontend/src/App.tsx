@@ -4,6 +4,7 @@ import CartPage from "./pages/CartPage";
 import PurchasePage from "./pages/PurchasePage";
 import BooksPage from "./pages/BooksPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminBooksPage from "./pages/AdminBooksPage";
 
 // This is the main entry point of the application.
 // It sets up routing and wraps the app in the CartProvider for global cart state.
@@ -29,6 +30,8 @@ function App() {
 
             {/* Cart page where users see their selected items */}
             <Route path="/cart" element={<CartPage />} />
+
+            <Route path="/adminbooks" element={<AdminBooksPage />} />
           </Routes>
         </Router>
       </CartProvider>
