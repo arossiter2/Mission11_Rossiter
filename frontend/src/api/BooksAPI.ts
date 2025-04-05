@@ -5,7 +5,8 @@ interface FetchBooksResponse {
   totalNumBooks: number;
 }
 
-const API_URL = "https://localhost:5000/api/Book";
+const API_URL =
+  "https://mission13rossiterbackend-fxhjaqc0eubqhtb3.eastus-01.azurewebsites.net/api/book";
 
 export const fetchBooks = async (
   pageSize: number,
@@ -22,7 +23,6 @@ export const fetchBooks = async (
         selectedCategories.length ? `&${categoryParams}` : ""
       }`
     );
-    
 
     if (!response.ok) {
       throw new Error("Failed to fetch books");
