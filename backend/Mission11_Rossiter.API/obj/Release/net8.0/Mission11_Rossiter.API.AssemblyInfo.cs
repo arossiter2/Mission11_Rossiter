@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Mission11_Rossiter.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ade0d7a6c907ac3565d17e4a37cf9b59be3594f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cdec5d0e40f0df0ace791ed0f76343da72368dc2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Mission11_Rossiter.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Mission11_Rossiter.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
